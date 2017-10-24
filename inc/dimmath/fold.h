@@ -3,8 +3,9 @@
 
 #include <stddef.h>
 #include <type_traits>
-#include <dimmath/get.h>
 #include <utility>
+
+#include <dimmath/get.h>
 
 namespace dimmath
 {
@@ -27,14 +28,29 @@ namespace dimmath
     }
   };
 
+  template <size_t Size, typename Operation, typename T, typename Container>
+  struct FoldDecide
+  {
+    constexpr static T apply(Operation&& op, const T& initial, const Container& c)
+    {
+      return Foldr<c.size()-1, Operation, T, Container>::apply(std::forward<Operation>(op), initial, c);
+    }
+  };
+
+  template <typename Operation, typename T, typename Container>
+  struct FoldDecide<0, Operation, T, Container> 
+  {
+    constexpr static T apply(Operation&& /*op*/, const T& initial, const Container& /*c*/)
+    {
+      return initial;
+    }
+  };
+
   template <typename Operation, typename T, typename Container>
   constexpr T foldr(Operation&& op, const T& initial, const Container& c)
   {
-    static_assert(c.size() > 0u, "Can't sum 0-size container.");
-    return Foldr<c.size()-1, Operation, T, Container>::apply(std::forward<Operation>(op), initial, c);
+    return FoldDecide<c.size(), Operation, T, Container>::apply(std::forward<Operation>(op), initial, c);
   }
-
-
 }
 
 #endif
