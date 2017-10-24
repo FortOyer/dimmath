@@ -3,8 +3,8 @@ set(CMAKE_CXX_STANDARD 14)
 
 project(dimmath)
 
-add_executable(test_vector test/test_vector.cpp)
-target_include_directories(test_vector PUBLIC ./inc ./thirdparty)
+add_executable(test_fold test/test_fold.cpp)
+target_include_directories(test_fold PUBLIC ./inc ./thirdparty)
 
 enable_testing()
-add_test(NAME test_vector COMMAND test_vector)
+add_test(NAME test_fold COMMAND test_fold)
