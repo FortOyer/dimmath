@@ -9,7 +9,7 @@ namespace dimmath
   template <typename Container>
   constexpr typename Container::value_type sum(Container&& c)
   {
-    return foldr(std::plus<typename Container::value_type> { },
+    return foldl(std::plus<typename Container::value_type> { },
                  typename Container::value_type { },
                  std::forward<Container>(c));
   }

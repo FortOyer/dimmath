@@ -10,9 +10,9 @@ namespace dimmath
 template <typename Container>
 constexpr typename Container::value_type distance_squared(Container&& c)
 {
-  return foldr([](const typename Container::value_type& v1, const typename Container::value_type& v2)
+  return foldl([](const typename Container::value_type& v1, const typename Container::value_type& v2)
                {
-                 return v1*v1 + v2;
+                 return v1 + v2*v2;
                },
                typename Container::value_type { },
                std::forward<Container>(c));

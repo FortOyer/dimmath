@@ -23,12 +23,27 @@ TEST_CASE( "Distances are computed", "[fold]" )
 TEST_CASE("Empty", "[fold]")
 {
   REQUIRE(dimmath::foldr(std::plus<int>(), 5, std::array<int, 0> { }) == 5);
+  REQUIRE(dimmath::foldl(std::plus<int>(), 5, std::array<int, 0> { }) == 5);
+}
+
+TEST_CASE("Associativity", "[fold]")
+{
+  REQUIRE(dimmath::foldl(std::minus<int>(), 0, std::array<int, 10> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }) == -55);
+  REQUIRE(dimmath::foldr(std::minus<int>(), 0, std::array<int, 10> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }) == -5);
 }
 
 TEST_CASE("Different output form", "[fold]")
 {
   REQUIRE(dimmath::foldr(
         [](double x, std::string y) -> std::string
+        {
+          return y + std::to_string(static_cast<int>(x));
+        },
+        std::string { "Hello" },
+        std::array<double, 5> { 1.2, 2.22, 3.13431, 4.999999, 0.0 }) == "Hello04321");
+
+  REQUIRE(dimmath::foldl(
+        [](std::string y, double x) -> std::string
         {
           return y + std::to_string(static_cast<int>(x));
         },
